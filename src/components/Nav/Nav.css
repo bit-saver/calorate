@@ -1,0 +1,74 @@
+nav {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 999;
+  padding: 0; }
+  @media screen and (min-width: 768px) {
+    nav {
+      padding: .8em; } }
+
+nav .ui.compact.menu {
+  height: 100%; }
+
+nav .ui.menu .item {
+  color: #e2e2e2;
+  font-size: 16px;
+  font-weight: bold;
+  letter-spacing: 0.5px; }
+  @media screen and (min-width: 993px) and (max-width: 1085px) {
+    nav .ui.menu .item:not(.feedback) {
+      padding: 5px !important; } }
+  nav .ui.menu .item.feedback {
+    margin-right: 0;
+    border-radius: 0 !important;
+    color: #112e51 !important;
+    background-color: #faab1a; }
+    nav .ui.menu .item.feedback:hover {
+      border-bottom: none !important;
+      background-color: #faab1a; }
+
+nav .content.icon {
+  color: #112e51;
+  font-size: 1.5em;
+  margin-top: 0.5em;
+  cursor: pointer; }
+
+.bar nav .content.icon {
+  margin: 0.5em;
+  float: right; }
+
+nav .mobileMenu {
+  position: fixed;
+  width: 100%;
+  left: 0;
+  top: 0;
+  justify-content: right;
+  background-image: linear-gradient(60deg, #0071bc 2%, #02bfe7 100%);
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-align: center;
+  font-size: 1em;
+  font-weight: bold; }
+
+nav .mobileMenu li {
+  padding-top: 2em;
+  text-decoration: none; }
+
+nav .mobileMenu li a {
+  color: white;
+  font-size: 1.3em;
+  letter-spacing: 0.05em; }
+  nav .mobileMenu li a.feedback {
+    padding: 10px;
+    color: #112e51;
+    background-color: #faab1a; }
+
+nav .mobileMenu .close.icon {
+  font-size: 1.5em;
+  position: absolute;
+  top: 0.5em;
+  right: 0.5em;
+  cursor: pointer; }

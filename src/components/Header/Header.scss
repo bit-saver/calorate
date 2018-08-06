@@ -1,0 +1,96 @@
+@import "../../assets/styles/colors.scss";
+
+header {
+  text-align: center;
+}
+
+.bar {
+  background: transparent;
+  margin-bottom: 3em;
+
+  header {
+    min-height: 65px;
+  }
+
+  nav {
+    @media screen and (max-width: 767px) {
+      position: fixed;
+      top: 0;
+      right: 0;
+      z-index: 999;
+      padding: 0;
+      width: 100%;
+    }
+  }
+
+  //nav .content.icon {
+  //  color: white;
+  //}
+  //
+  //nav .ui.menu .item,
+  //nav .ui.menu .item:last-child {
+  //  //color: white;
+  //  border-radius: 0;
+  //}
+  //
+  //nav .ui.menu .item:hover {
+  //  color: white;
+  //  border-bottom: 2px solid white;
+  //}
+  //
+  //.title,
+  //.title:hover {
+  //  color: white;
+  //}
+}
+
+.bar {
+  //background-image: linear-gradient(60deg, $light-blue 2%, $bright-blue 100%);
+  background-color: $dark-teal;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 998;
+
+  header {
+    @media screen and (max-width: 767px) {
+      text-align: left;
+    }
+  }
+
+  header a,
+  header a:hover {
+    color: $gray;
+    font-size: 1.5em;
+  }
+}
+
+.bar .ui.container {
+  @media screen and (min-width: 768px) {
+    width: 1600px;
+  }
+  position: relative;
+}
+
+.bar h1.ui.header {
+  @media screen and (min-width: 768px) {
+    float: left;
+    padding-top: 0.3em;
+  }
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+.bar .header .title {
+  padding: 0;
+  font-size: 0.8em;
+  @media screen and (min-width: 768px) {
+    font-size: 1em;
+    padding: 0.5em;
+    padding-left: 0;
+  }
+}
