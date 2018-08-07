@@ -1,10 +1,11 @@
-import { LOAD_GRAPH_SUCCESS, LOAD_GRAPH_PENDING, LOAD_GRAPH_FAILED } from './types';
+import { DATE_CHANGE } from './types';
 
-export const loadGraph = () => async ( dispatch ) => {
-  dispatch( { type: LOAD_GRAPH_PENDING } );
-
+export const loadGraph = ( state ) => async ( dispatch ) => {
+  console.log( 'loadGraph', state );
   return dispatch( {
-    type: LOAD_GRAPH_SUCCESS,
-    payload: null
+    type: DATE_CHANGE,
+    payload: {
+      ...state
+    }
   } );
 };

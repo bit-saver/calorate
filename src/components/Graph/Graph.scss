@@ -1,3 +1,21 @@
-.graph {
+@import "../../assets/styles/colors.scss";
 
+.graph {
+  .canvas {
+    width: 100%;
+    clear: both;
+    text-align: center;
+    padding: 5px;
+    margin-top: 15px;
+
+    svg {
+      overflow: visible;
+    }
+  }
+
+  .controls {
+    width: 100%;
+    clear: both;
+    text-align: center;
+  }
 }

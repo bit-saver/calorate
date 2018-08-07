@@ -4,8 +4,7 @@ import './HomePage.css';
 import Graph from '../../Graph';
 
 const HomePage = () => (
-  <section className="home">
-    The graph goes here, bitches!<br/>
+  <section className="content">
     <Graph />
   </section>
 );

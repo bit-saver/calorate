@@ -3,3 +3,6 @@
     width: 1600px;
     padding-left: 2em;
     padding-right: 2em; } }
+
+.ui.container .content {
+  margin-top: 5em; }

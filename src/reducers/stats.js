@@ -2,11 +2,7 @@ import { LOAD_STATS_SUCCESS, LOAD_STATS_PENDING, LOAD_STATS_FAILED } from '../ac
 
 const INITIAL_STATE = {
   error: false,
-  data: {
-    weight: [],
-    fat: [],
-    calories: []
-  },
+  data: [],
   loading: false
 };
 

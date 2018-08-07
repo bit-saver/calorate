@@ -1,34 +1,15 @@
-import { LOAD_GRAPH_SUCCESS, LOAD_GRAPH_PENDING, LOAD_GRAPH_FAILED } from '../actions/types';
-import moment from 'moment';
+import { DATE_CHANGE } from '../actions/types';
 
 const INITIAL_STATE = {
   dateFrom: null,
-  dateTo: null,
-  loading: false,
-  error: false
+  dateTo: null
 };
 
 export default ( state = INITIAL_STATE, action ) => {
   switch ( action.type ) {
-    case LOAD_GRAPH_PENDING:
+    case DATE_CHANGE:
       return {
-        ...state,
-        loading: true
-      };
-
-    case LOAD_GRAPH_FAILED:
-      return {
-        ...state,
-        ...INITIAL_STATE,
-        error: true,
-        loading: false
-      };
-
-    case LOAD_GRAPH_SUCCESS:
-      return {
-        ...state,
-        error: false,
-        loading: false
+        ...state
       };
 
     default: return state;

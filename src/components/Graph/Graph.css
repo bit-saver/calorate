@@ -1,0 +1,13 @@
+.graph .canvas {
+  width: 100%;
+  clear: both;
+  text-align: center;
+  padding: 5px;
+  margin-top: 15px; }
+  .graph .canvas svg {
+    overflow: visible; }
+
+.graph .controls {
+  width: 100%;
+  clear: both;
+  text-align: center; }

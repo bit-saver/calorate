@@ -6,6 +6,7 @@
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
     "bodybuilder": "^2.2.10",
+    "d3": "^5.5.0",
     "html-react-parser": "^0.4.6",
     "lodash.differencewith": "^4.5.0",
     "lodash.isequal": "^4.5.0",
