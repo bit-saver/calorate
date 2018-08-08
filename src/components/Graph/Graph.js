@@ -3,9 +3,11 @@ import { array, shape, func, bool } from 'prop-types';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
 import './Graph.css';
-import { Button, Loader } from 'semantic-ui-react';
+import { Button, Icon, Loader } from 'semantic-ui-react';
 import Plot from '../Plot/Plot';
 import moment from 'moment';
+import Repeatable from 'react-repeatable';
+
 
 class Graph extends Component {
   constructor( props ) {
@@ -13,7 +15,8 @@ class Graph extends Component {
     const now = moment();
     this.holdTimer = null;
     this.state = {
-      dateFrom: now.clone().subtract( 1, 'month' ) ,
+      graphType: 'weight',
+      dateFrom: now.clone().subtract( 30, 'days' ),
       dateTo: now
     };
   }
@@ -26,25 +29,17 @@ class Graph extends Component {
   }
 
   shouldComponentUpdate( nextProps, nextState ) {
-    console.log( this.state.dateFrom.toString(), nextState.dateFrom.toString() );
     return this.props.stats.loading !== nextProps.stats.loading
       || this.props.stats.error !== nextProps.stats.error
       || this.props.stats.data.length !== nextProps.stats.data.length
       || !this.state.dateFrom.isSame( nextState.dateFrom )
-      || !this.state.dateTo.isSame( nextState.dateTo );
+      || !this.state.dateTo.isSame( nextState.dateTo )
+      || this.state.graphType !== nextState.graphType;
   }
-
-  reset = ( e ) => {
-    e.preventDefault();
-    this.setState( {
-      dateFrom: moment().subtract( 1, 'month' ),
-      dateTo: moment()
-    } );
-  };
 
   holdAction = callback => ( e ) => {
     e.preventDefault();
-    if ( this.holdTimer ) clearTimeout( this.holdTimer );
+    if ( this.holdTimer && this.holdTimer !== true ) clearTimeout( this.holdTimer );
     this.holdTimer = true;
     callback();
     setTimeout( () => {
@@ -53,7 +48,7 @@ class Graph extends Component {
           callback();
         }, 10 );
       }
-    }, 500 );
+    }, 1000 );
   };
 
   releaseAction = ( e ) => {
@@ -63,37 +58,100 @@ class Graph extends Component {
   };
 
   next = unit => () => {
+    const n = ( unit === 'month' ? 30 : 1 );
     const { dateFrom, dateTo } = this.state;
+    const newDateTo = dateTo.clone().add( n, 'days' );
+
     this.setState( {
-      dateFrom: dateFrom.clone().add( 1, unit ),
-      dateTo: dateTo.clone().add( 1, unit )
+      graphType: this.state.graphType,
+      dateFrom: dateFrom.clone().add( n, 'days' ),
+      dateTo: newDateTo
     } );
   };
 
   prev = unit => () => {
+    const n = ( unit === 'month' ? 30 : 1 );
     const { dateFrom, dateTo } = this.state;
     this.setState( {
-      dateFrom: dateFrom.clone().subtract( 1, unit ),
-      dateTo: dateTo.clone().subtract( 1, unit )
+      graphType: this.state.graphType,
+      dateFrom: dateFrom.clone().subtract( n, 'days' ),
+      dateTo: dateTo.clone().subtract( n, 'days' )
+    } );
+  };
+
+  setGraphType = graphType => ( e ) => {
+    e.preventDefault();
+    this.setState( {
+      graphType,
+      dateFrom: this.state.dateFrom,
+      dateTo: this.state.dateTo
+    } );
+  };
+
+  reset = ( e ) => {
+    e.preventDefault();
+    this.setState( {
+      graphType: this.state.graphType,
+      dateFrom: moment().subtract( 1, 'month' ),
+      dateTo: moment()
     } );
   };
 
   render() {
-    console.log( 'Graph: render called' );
-    const { dateFrom, dateTo } = this.state;
-
+    console.log( 'Graph: render called', this.state );
+    const { graphType, dateFrom, dateTo } = this.state;
     return (
       <div className="graph">
+        <div className="controls">
+          <Button.Group>
+            <Button active={ graphType === 'weight' } onClick={ this.setGraphType( 'weight' ) }>Weight</Button>
+            <Button active={ graphType === 'fat' } onClick={ this.setGraphType( 'fat' ) }>Fat</Button>
+            <Button active={ graphType === 'calories' } onClick={ this.setGraphType( 'calories' ) }>Calories</Button>
+          </Button.Group>
+        </div>
         <div className="canvas">
           { this.props.stats.loading && (
             <Loader active />
           ) }
+        </div>
+        <div className="canvas">
           { !this.props.stats.loading && this.props.stats.data && (
             <Plot
               dateFrom={ dateFrom }
               dateTo={ dateTo }
               data={ this.props.stats.data }
-              height={ 600 }
+              graphType={ graphType }
+              height={ 400 }
+              width={ 800 }
+              margin={ 25 }
+              selectX={ datum => new Date( datum.dateTime ) }
+              selectY={ datum => datum.weight }
+            />
+          ) }
+        </div>
+        <div className="canvas">
+          { !this.props.stats.loading && this.props.stats.data && (
+            <Plot
+              dateFrom={ dateFrom }
+              dateTo={ dateTo }
+              data={ this.props.stats.data }
+              graphType={ graphType }
+              height={ 400 }
+              width={ 800 }
+              margin={ 25 }
+              selectX={ datum => new Date( datum.dateTime ) }
+              selectY={ datum => datum.calories }
+            />
+          ) }
+        </div>
+        <div className="canvas">
+          { !this.props.stats.loading && this.props.stats.data && (
+            <Plot
+              dateFrom={ dateFrom }
+              dateTo={ dateTo }
+              data={ this.props.stats.data }
+              graphType={ graphType }
+              height={ 400 }
               width={ 800 }
               margin={ 25 }
               selectX={ datum => new Date( datum.dateTime ) }
@@ -102,37 +160,57 @@ class Graph extends Component {
           ) }
         </div>
         <div className="controls">
-          <Button color="blue" onMouseDown={ this.holdAction( this.prev( 'month' ) ) } onMouseUp={ this.releaseAction }>
-            Prev Month
-          </Button>
+          <Repeatable
+            style={ { display: 'inline' } }
+            onPress={ this.prev( 'month' ) }
+            onHold={ this.prev( 'month' ) }
+          >
+            <Button icon color="blue">
+              <Icon name="fast backward" />
+            </Button>
+          </Repeatable>
           &nbsp;
-          <Button.Group>
-            <Button
-              color="green"
-              onMouseDown={ this.holdAction( this.prev( 'day' ) ) }
-              onMouseUp={ this.releaseAction }
+          <Button.Group icon>
+            <Repeatable
+              style={ { display: 'inline' } }
+              onPress={ this.prev( 'day' ) }
+              onHold={ this.prev( 'day' ) }
             >
-              Prev Day
+              <Button color="green">
+                <Icon name="step backward" />
+              </Button>
+            </Repeatable>
+            &nbsp;
+            <Button color="red" onClick={ this.reset }>
+              Reset
             </Button>
             &nbsp;
-            <Button color="red" basic onClick={ this.reset }>Reset</Button>
-            &nbsp;
-            <Button
-              color="green"
-              onMouseDown={ this.holdAction( this.next( 'day' ) ) }
-              onMouseUp={ this.releaseAction }
+            <Repeatable
+              style={ { display: 'inline' } }
+              onPress={ this.next( 'day' ) }
+              onHold={ this.next( 'day' ) }
             >
-              Next Day
-            </Button>
+              <Button color="green">
+                <Icon name="step forward" />
+              </Button>
+            </Repeatable>
           </Button.Group>
           &nbsp;
           &nbsp;
-          <Button color="blue" onMouseDown={ this.holdAction( this.next( 'month' ) ) } onMouseUp={ this.releaseAction }>
-            Next Month
+          <Repeatable
+            style={ { display: 'inline' } }
+            onPress={ this.next( 'month' ) }
+            onHold={ this.next( 'month' ) }
+          >
+            <Button icon color="blue">
+              <Icon name="fast forward" />
+            </Button>
+          </Repeatable>
+          <br />
+          <br />
+          <Button onClick={ this.props.loadStats }>
+            Reload
           </Button>
-          <br />
-          <br />
-          <Button onClick={ this.props.loadStats }>Reload</Button>
         </div>
       </div>
     );

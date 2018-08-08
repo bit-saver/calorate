@@ -1,7 +1,7 @@
 import React from 'react';
 import getContentContainerStyle from './getContentContainerStyle';
 import getSVGDimensions from './getSVGDimensions';
-import PropTypes, { string, number, object, element, array, bool } from 'prop-types';
+import PropTypes, { string, number, object, element, array, bool, func } from 'prop-types';
 
 const CanvasWithMargin = ( {
   children,
