@@ -1,9 +1,18 @@
 .graph .canvas {
   width: 100%;
+  min-height: 400px;
   clear: both;
   text-align: center;
   padding: 5px;
   margin-top: 15px; }
+  .graph .canvas.loading {
+    position: relative; }
+  .graph .canvas .loader {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0 auto;
+    left: calc(50% - 16px); }
   .graph .canvas svg {
     overflow: visible; }
 

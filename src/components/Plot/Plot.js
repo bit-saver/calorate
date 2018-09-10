@@ -2,47 +2,47 @@ import React, { Component } from 'react';
 import CanvasWithMargin from '../CanvasWithMargin';
 import { array, number, func, object, string } from 'prop-types';
 import { extent as d3ArrayExtent } from 'd3-array';
-import {
-  scaleLinear as d3ScaleLinear,
-  scaleTime as d3ScaleTime
-} from 'd3-scale';
+import { scaleLinear as d3ScaleLinear, scaleTime as d3ScaleTime } from 'd3-scale';
 import { line as d3Line } from 'd3-shape';
-import {
-  axisBottom as d3AxisBottom,
-  axisLeft as d3AxisLeft
-} from 'd3-axis';
+import { axisBottom as d3AxisBottom, axisLeft as d3AxisLeft } from 'd3-axis';
 import { select as d3Select } from 'd3-selection';
-import d3tip from 'd3-tip';
 
 import './Plot.css';
 import moment from 'moment';
 
-class Plot extends Component { // eslint-disable-line
+class Plot extends Component {
+  // eslint-disable-line
   shouldComponentUpdate( nextProps, nextState ) {
-    const update = ( this.props.data !== nextProps.data && nextProps.data )
-      || !this.props.dateFrom.isSame( nextProps.dateFrom )
-      || !this.props.dateTo.isSame( nextProps.dateTo )
-      || this.props.graphType !== nextProps.graphType;
+    const update =
+      ( this.props.data !== nextProps.data && nextProps.data ) ||
+      !this.props.dateFrom.isSame( nextProps.dateFrom ) ||
+      !this.props.dateTo.isSame( nextProps.dateTo ) ||
+      this.props.graphType !== nextProps.graphType;
     if ( update ) console.log( 'plot needs to update' );
     return update;
   }
 
   addYearLabel = ( node ) => {
-    d3Select( node ).selectAll( 'g.tick' ).nodes().forEach( ( e ) => {
-      const d = d3Select( e ).selectAll( 'text' ).data()[0];
-      const labels = d3Select( e ).selectAll( '.year-label' );
-      if ( labels.nodes().length > 0 ) {
-        d3Select( labels.nodes()[0] ).text( d.getFullYear() );
-      } else {
-        d3Select( e )
-          .append( 'text' )
-          .attr( 'class', 'year-label' )
-          .attr( 'fill', '#000' )
-          .attr( 'y', 9 )
-          .attr( 'dy', '2em' )
-          .text( d.getFullYear() );
-      }
-    } );
+    d3Select( node )
+      .selectAll( 'g.tick' )
+      .nodes()
+      .forEach( ( e ) => {
+        const d = d3Select( e )
+          .selectAll( 'text' )
+          .data()[0];
+        const labels = d3Select( e ).selectAll( '.year-label' );
+        if ( labels.nodes().length > 0 ) {
+          d3Select( labels.nodes()[0] ).text( d.getFullYear() );
+        } else {
+          d3Select( e )
+            .append( 'text' )
+            .attr( 'class', 'year-label' )
+            .attr( 'fill', '#000' )
+            .attr( 'y', 9 )
+            .attr( 'dy', '2em' )
+            .text( d.getFullYear() );
+        }
+      } );
   };
 
   render() {
@@ -100,20 +100,12 @@ class Plot extends Component { // eslint-disable-line
       y: selectScaledY( datum )
     } ) );
 
-    const tip = d3tip()
-      .attr( 'class', 'd3-tip' )
-      .html( ( d ) => {
-        console.log( 'tip d', d );
-        return 'test';
-      } );
-
     return (
       <CanvasWithMargin
         className="container"
         height={ this.props.height }
         width={ this.props.width }
         margin={ this.props.margin }
-        tip={ tip }
       >
         <g
           className="xAxis"
@@ -126,10 +118,7 @@ class Plot extends Component { // eslint-disable-line
             transform: `translateY(${this.props.height}px)`
           } }
         />
-        <g
-          className="yAxis"
-          ref={ node => d3Select( node ).call( yAxis ) }
-        />
+        <g className="yAxis" ref={ node => d3Select( node ).call( yAxis ) } />
         <g className="line">
           <path d={ linePath } />
         </g>
@@ -140,10 +129,6 @@ class Plot extends Component { // eslint-disable-line
               cy={ circlePoint.y }
               key={ `${circlePoint.x},${circlePoint.y}` }
               r={ 4 }
-              onMouseOver={ tip.show }
-              onFocus={ tip.show }
-              onMouseOut={ tip.hide }
-              onBlur={ tip.hide }
             />
           ) ) }
         </g>

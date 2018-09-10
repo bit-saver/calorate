@@ -23,6 +23,7 @@ module.exports = {
     'no-console': 0,
     'no-param-reassign': 0,
     'no-unused-vars': ['warn', { vars: 'local', args: 'none' }],
+    'no-trailing-spaces': 0,
     'import/prefer-default-export': 0,
     'consistent-return': 0,
     'import/no-extraneous-dependencies': [
